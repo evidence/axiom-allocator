@@ -1,0 +1,38 @@
+                            AXIOM allocator API
+===============================================================================
+
+This repository contains the implementation of the Axiom memory allocator.
+The code is organized with the following directories:
+
+ * ./include
+    + contains the API exposed to the User applications
+ * ./src
+    + contains the implementation of the Axiom Allocator
+ * ./test
+    + contains some tests of the API
+
+
+## How to compile
+
+```
+# compile the libaxiom_allocator.so
+make
+
+# or compile the libaxiom_allocator.so with debug prints
+make debug
+
+
+# compile the tests
+make tests
+```
+
+## How to run tests
+```
+# use the run script
+./axal_run.sh test/axiom-allocator-test
+
+# manually
+export LD_LIBRARY_PATH=$PWD/src:$LD_LIBRARY_PATH
+./test/axiom-allocator-test
+```
+

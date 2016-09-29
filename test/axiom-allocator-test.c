@@ -36,7 +36,7 @@ usage(void)
 int
 main(int argc, char **argv)
 {
-    axiom_altype_t axtype = AXAL_TEST_TYPE;
+    axiom_altype_t altype = AXAL_TEST_TYPE;
     size_t pr_regsize = AXAL_TEST_PR_REGSIZE;
     size_t sh_regsize = AXAL_TEST_SH_REGSIZE;
     size_t pr_mallocsize = AXAL_TEST_PR_MALLOCSIZE;
@@ -65,9 +65,9 @@ main(int argc, char **argv)
                 }
 
                 if (strncmp(type_string, "sw", 2) == 0) {
-                    axtype = AXAL_SW;
+                    altype = AXAL_SW;
                 } else if (strncmp(type_string, "hw", 2) == 0) {
-                    axtype = AXAL_HW;
+                    altype = AXAL_HW;
                 } else {
                     EPRINTF("wrong message type");
                     free(type_string);
@@ -89,15 +89,26 @@ main(int argc, char **argv)
         }
     }
 
-    ret = axiom_allocator_init(pr_regsize, sh_regsize, axtype);
+    printf("-- start axiom allocator test --\n");
+    printf("   private - region_size = %zu malloc_size = %zu\n",
+            pr_regsize, pr_mallocsize);
+    printf("   shared  - region_size = %zu malloc_size = %zu\n",
+            sh_regsize, sh_mallocsize);
+    printf("   allocator type (SW=1, HW=2) = %d\n", altype);
+
+    ret = axiom_allocator_init(pr_regsize, sh_regsize, altype);
     if (ret) {
         EPRINTF("axiom_allocator_init error %d", ret);
+        ret = -1;
+        goto err;
     }
     IPRINTF(verbose, "axiom-allocator initialized");
 
     pr_ptr = axiom_private_malloc(pr_mallocsize);
     if (pr_ptr == NULL) {
         EPRINTF("axiom_private_malloc error %p", pr_ptr);
+        ret = -2;
+        goto err;
     }
     IPRINTF(verbose, "private memory allocated - addr: %p size: %zu",
             pr_ptr, pr_mallocsize);
@@ -105,6 +116,8 @@ main(int argc, char **argv)
     sh_ptr = axiom_shared_malloc(sh_mallocsize);
     if (sh_ptr == NULL) {
         EPRINTF("axiom_shared_malloc error %p", sh_ptr);
+        ret = -3;
+        goto err;
     }
     IPRINTF(verbose, "shared memory allocated - addr: %p size: %zu",
             sh_ptr, sh_mallocsize);
@@ -116,5 +129,7 @@ main(int argc, char **argv)
     IPRINTF(verbose, "shared memory freed - addr: %p size: %zu",
             sh_ptr, sh_mallocsize);
 
-    return 0;
+err:
+    printf("-- ended with error code %d --\n", ret);
+    return ret;
 }

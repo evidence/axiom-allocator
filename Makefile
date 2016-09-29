@@ -19,15 +19,19 @@ CC := ${CCPREFIX}gcc
 AR := ${CCPREFIX}ar
 RANLIB := ${CCPREFIX}ranlib
 
-DFLAGS := -g -DPDEBUG
+debug: DFLAGS := -g -DPDEBUG
+DFLAGS :=
+
 CFLAGS += -fPIC -Wall $(DFLAGS) -I$(AXIOM_ALLOC_INCLUDE)
 LDFLAGS += -L$(AXIOM_ALLOC_SRC)
 LDLIBS += -laxiom_allocator
 #LDLIBS += -Wl,--whole-archive -laxiom_allocator -Wl,--no-whole-archive
 
-.PHONY: all tests clean install
+.PHONY: all tests debug clean install
 
 all: $(LIBS)
+
+debug: all tests
 
 tests: $(LIBS) $(TESTS)
 
