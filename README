@@ -15,24 +15,22 @@ The code is organized with the following directories:
 ## How to compile
 
 ```
-# compile the libaxiom_allocator.so
+# generate configure and Makefiles with autotools (only after the first clone)
+./bootstrap.sh
+
+# configure without debug prints
+./configure
+
+# or configure with debug prints
+./configure --enable-debug
+
+# compile the libaxiom_allocator.so and tests
 make
-
-# or compile the libaxiom_allocator.so with debug prints
-make debug
-
-
-# compile the tests
-make tests
 ```
 
 ## How to run tests
 ```
-# use the run script
-./axal_run.sh test/axiom-allocator-test
+test/axiom-allocator-test
 
-# manually
-export LD_LIBRARY_PATH=$PWD/src:$LD_LIBRARY_PATH
-./test/axiom-allocator-test
 ```
 
