@@ -1,14 +1,14 @@
 /*!
- * \file axiom_l2_allocator.h
+ * \file axiom_allocator_l2_l3.h
  *
  * \version     v0.8
  * \date        2016-09-29
  *
- * This file contains the AXIOM L2 allocator API
+ * This file contains the AXIOM allocator interface between L2 and L3
  *
  */
-#ifndef AXIOM_L2_ALLOCATOR_h
-#define AXIOM_L2_ALLOCATOR_h
+#ifndef AXIOM_ALLOCATOR_L2_L3_h
+#define AXIOM_ALLOCATOR_L2_L3_h
 
 /*!
  * \brief Initialize the L2 allocator.
@@ -20,7 +20,7 @@
  *
  * \return Return the error code of operation. (0 if everything is OK)
  */
-int axiom_l2_init(uint8_t master_nodeid, uint8_t local_nodeid,
+int axiom_al23_init(uint8_t master_nodeid, uint8_t local_nodeid,
         uint64_t private_size, uint64_t shared_size);
 
 /*!
@@ -32,7 +32,7 @@ int axiom_l2_init(uint8_t master_nodeid, uint8_t local_nodeid,
  *
  * \return Return the error code of operation. (0 if everything is OK)
  */
-int axiom_l2_get_prregion(uint64_t *start, uint64_t *size);
+int axiom_al23_get_prregion(uint64_t *start, uint64_t *size);
 
 /*!
  * \brief Require a new shared region.
@@ -42,6 +42,6 @@ int axiom_l2_get_prregion(uint64_t *start, uint64_t *size);
  *
  * \return Return the error code of operation. (0 if everything is OK)
  */
-int axiom_l2_req_shregion(uint64_t *start, uint64_t *size);
+int axiom_al23_req_shregion(uint64_t *start, uint64_t *size);
 
 #endif /* !AXIOM_L2_ALLOCATOR_h */

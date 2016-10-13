@@ -10,17 +10,17 @@
 #include <stdio.h>
 
 #include "axiom_allocator.h"
-#include "axiom_l3_allocator.h"
+#include "axiom_allocator_l3/axiom_allocator_l3.h"
 #include "dprintf.h"
 
-static axiom_l3_info_t l3_info;
+static axiom_al3_info_t al3_info;
 
 #define MAX_INFO_TABLE  2
-static axiom_l3_info_t info_table[MAX_INFO_TABLE];
+static axiom_al3_info_t info_table[MAX_INFO_TABLE];
 static int info_table_used = 0;
 
 void
-axiom_l3_register(axiom_l3_info_t *info)
+axiom_al3_register(axiom_al3_info_t *info)
 {
     DPRINTF("registered new impl - type: %d", info->type);
 
@@ -47,31 +47,31 @@ axiom_allocator_init(size_t private_size, size_t shared_size,
         return ret;
     }
 
-    l3_info = info_table[i];
+    al3_info = info_table[i];
 
-    return l3_info.alloc_init(private_size, shared_size);
+    return al3_info.alloc_init(private_size, shared_size);
 }
 
 void *
 axiom_private_malloc(size_t sz)
 {
-    return l3_info.private_malloc(sz);
+    return al3_info.private_malloc(sz);
 }
 
 void *
 axiom_shared_malloc(size_t sz)
 {
-    return l3_info.shared_malloc(sz);
+    return al3_info.shared_malloc(sz);
 }
 
 void
 axiom_private_free(void *ptr)
 {
-    l3_info.private_free(ptr);
+    al3_info.private_free(ptr);
 }
 
 void
 axiom_shared_free(void *ptr)
 {
-    l3_info.shared_free(ptr);
+    al3_info.shared_free(ptr);
 }
