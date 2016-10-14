@@ -13,15 +13,12 @@
 /*!
  * \brief Initialize the L2 allocator.
  *
- * \param master_nodeid Node id of master node
- * \param local_nodeid  Node id of local node
  * \param private_size	maximum private memory size needed by the application
  * \param shared_size   maximum shared memory size needed by the application
  *
  * \return Return the error code of operation. (0 if everything is OK)
  */
-int axiom_al23_init(uint8_t master_nodeid, uint8_t local_nodeid,
-        uint64_t private_size, uint64_t shared_size);
+int axiom_al23_init(uint64_t private_size, uint64_t shared_size);
 
 /*!
  * \brief Get the private region. If it is called multiple times, it returns
