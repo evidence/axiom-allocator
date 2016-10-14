@@ -21,16 +21,36 @@ AC_PROG_LN_S
 
 # Debug option
 AC_ARG_ENABLE(debug,
-AS_HELP_STRING([--enable-debug],
-               [enable debugging, default: no]),
-[case "${enableval}" in
-             yes) debug=true ;;
-             no)  debug=false ;;
-             *)   AC_MSG_ERROR([bad value ${enableval} for --enable-debug]) ;;
-esac],
-[debug=false])
+            AS_HELP_STRING([--enable-debug], [enable debugging, default: no]),
+            [case "${enableval}" in
+                yes) debug=true ;;
+                no)  debug=false ;;
+                *)   AC_MSG_ERROR([bad value ${enableval} for --enable-debug]) ;;
+            esac],
+            [debug=false])
 
 AM_CONDITIONAL(DEBUG, test x"$debug" = x"true")
+
+# axiom-evi-nic header file
+AXIOM_EVI_NIC_INCLUDE="`pwd`/../axiom-evi-nic/include"
+AC_ARG_WITH([axiom-evi-nic],
+            AS_HELP_STRING([--with-axiom-evi-nic=dir], [Include directory for axiom-evi-nic]),
+            [AXIOM_EVI_NIC_INCLUDE="$withval"])
+AC_SUBST([AXIOM_EVI_NIC_INCLUDE])
+
+# axiom-evi-apps header file
+AXIOM_EVI_APPS_INCLUDE="`pwd`/../axiom-evi-apps/include"
+AC_ARG_WITH([axiom-evi-apps],
+            AS_HELP_STRING([--with-axiom-evi-apps=dir], [Include directory for axiom-evi-apps]),
+            [AXIOM_EVI_APPS_INCLUDE="$withval"])
+AC_SUBST([AXIOM_EVI_APPS_INCLUDE])
+
+# axiom-run-lib
+AXIOM_RUN_LIB="`pwd`/../axiom-evi-apps/axiom-run/lib"
+AC_ARG_WITH([axiom-run-lib],
+            AS_HELP_STRING([--with-axiom-run-lib=dir], [Directory for axiom-run-lib]),
+            [AXIOM_RUN_LIB_INCLUDE="$withval"])
+AC_SUBST([AXIOM_RUN_LIB])
 
 # Checks for libraries.
 
