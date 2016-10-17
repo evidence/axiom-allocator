@@ -99,7 +99,7 @@ axiom_al1_init(void)
 }
 
 int
-axiom_al1_alloc(axiom_galloc_info_t *info)
+axiom_al1_alloc(axiom_alloc_msg_t *info)
 {
     int ret;
 
@@ -133,7 +133,7 @@ err:
 }
 
 int
-axiom_al1_alloc_appid(axiom_galloc_info_t *info)
+axiom_al1_alloc_appid(axiom_alloc_msg_t *info)
 {
     info->app_id = axiom_al1core_alloc_appid(&al1_core);
     if (info->app_id == AXIOM_NULL_APP_ID)
@@ -145,7 +145,7 @@ axiom_al1_alloc_appid(axiom_galloc_info_t *info)
 }
 
 int
-axiom_al1_release(axiom_galloc_info_t *info)
+axiom_al1_release(axiom_alloc_msg_t *info)
 {
     axiom_al1core_release(&al1_core, info->app_id);
     return 0;

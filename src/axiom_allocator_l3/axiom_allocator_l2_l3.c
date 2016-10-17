@@ -15,7 +15,8 @@
 #include "axiom_nic_types.h"
 #include "axiom_nic_limits.h"
 #include "axiom_nic_api_user.h"
-#include "axiom_global_allocator.h"
+#include "axiom_run_api.h"
+#include "axiom_allocator_protocol.h"
 
 #define AXIOM_ALLOCATOR_BARRIER_ID      3
 
@@ -62,7 +63,7 @@ axiom_al23_init(uint64_t private_size, uint64_t shared_size)
     }
 
     if (local_nodeid == master_nodeid) {
-        axiom_galloc_info_t info;
+        axiom_alloc_msg_t info;
         size_t info_size = sizeof(info);
 
         info.private_size = private_size;
@@ -91,7 +92,7 @@ axiom_al23_init(uint64_t private_size, uint64_t shared_size)
 int
 axiom_al23_get_prregion(uint64_t *start, uint64_t *size)
 {
-    axiom_galloc_info_t info;
+    axiom_alloc_msg_t info;
     size_t info_size = sizeof(info);
     axiom_err_t ret;
     int verbose = 0;
@@ -114,7 +115,7 @@ axiom_al23_get_prregion(uint64_t *start, uint64_t *size)
 int
 axiom_al23_req_shregion(uint64_t *start, uint64_t *size)
 {
-    axiom_galloc_info_t info;
+    axiom_alloc_msg_t info;
     size_t info_size = sizeof(info);
     axiom_err_t ret;
     int verbose = 0;

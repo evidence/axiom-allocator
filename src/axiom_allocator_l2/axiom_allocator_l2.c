@@ -15,7 +15,7 @@
 #include "evi_alloc.h"
 #include "axiom_nic_limits.h"
 #include "axiom_init_api.h"
-#include "axiom_global_allocator.h"
+#include "axiom_allocator_protocol.h"
 #include "axiom_allocator_l2.h"
 #include "axiom_allocator_l1_l2.h"
 
@@ -122,7 +122,7 @@ axiom_al2_release(axiom_dev_t *dev)
 
 int
 axiom_al2_alloc_reply(axiom_dev_t *dev, axiom_node_id_t src_node,
-        size_t size, void *inmsg, axiom_galloc_info_t *info)
+        size_t size, void *inmsg, axiom_alloc_msg_t *info)
 {
     axiom_err_t ret;
 
@@ -160,7 +160,7 @@ int
 axiom_al2_alloc(axiom_dev_t *dev, axiom_node_id_t src_node,
         axiom_port_t master_port, size_t size, void *buffer)
 {
-    axiom_galloc_info_t *info = (axiom_galloc_info_t *)buffer;
+    axiom_alloc_msg_t *info = (axiom_alloc_msg_t *)buffer;
     axiom_err_t ret;
 
     info->error = AXIOM_RET_OK;
@@ -216,7 +216,7 @@ int
 axiom_al2_get_prblock(axiom_dev_t *dev, axiom_node_id_t src_node,
         size_t size, void *buffer)
 {
-    axiom_galloc_info_t *info = (axiom_galloc_info_t *)buffer;
+    axiom_alloc_msg_t *info = (axiom_alloc_msg_t *)buffer;
 
     info->error = AXIOM_RET_OK;
 
@@ -237,7 +237,7 @@ int
 axiom_al2_get_shblock(axiom_dev_t *dev, axiom_node_id_t src_node,
         size_t size, void *buffer)
 {
-    axiom_galloc_info_t *info = (axiom_galloc_info_t *)buffer;
+    axiom_alloc_msg_t *info = (axiom_alloc_msg_t *)buffer;
     axiom_err_t ret;
 
     info->error = AXIOM_RET_OK;

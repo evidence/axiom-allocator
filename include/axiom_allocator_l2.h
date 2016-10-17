@@ -9,8 +9,6 @@
 #ifndef AXIOM_ALLOCATOR_L2_h
 #define AXIOM_ALLOCATOR_L2_h
 
-#include "axiom_global_allocator.h"
-
 int
 axiom_al2_init(axiom_app_id_t app_id);
 
@@ -19,7 +17,7 @@ axiom_al2_release(axiom_dev_t *dev);
 
 int
 axiom_al2_alloc_reply(axiom_dev_t *dev, axiom_node_id_t src_node,
-        size_t size, void *inmsg, axiom_galloc_info_t *info);
+        size_t size, void *inmsg, axiom_alloc_msg_t *info);
 
 int
 axiom_al2_alloc(axiom_dev_t *dev, axiom_node_id_t src_node,

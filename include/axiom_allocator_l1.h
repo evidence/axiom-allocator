@@ -10,8 +10,8 @@
 #define AXIOM_ALLOCATOR_L1_h
 
 void axiom_al1_init(void);
-int axiom_al1_alloc(axiom_galloc_info_t *info);
-int axiom_al1_alloc_appid(axiom_galloc_info_t *info);
-int axiom_al1_release(axiom_galloc_info_t *info);
+int axiom_al1_alloc(axiom_alloc_msg_t *info);
+int axiom_al1_alloc_appid(axiom_alloc_msg_t *info);
+int axiom_al1_release(axiom_alloc_msg_t *info);
 
 #endif /* AXIOM_ALLOCATOR_L1_h */

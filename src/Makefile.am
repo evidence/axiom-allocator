@@ -12,5 +12,5 @@ libaxiom_allocator_l1_la_SOURCES = axiom_allocator_l1/axiom_allocator_l1.c
 
 libaxiom_allocator_l2_la_SOURCES = axiom_allocator_l2/axiom_allocator_l2.c axiom_allocator_l2/axiom_allocator_l1_l2.c
 
-include_HEADERS = $(top_srcdir)/include/axiom_allocator.h $(top_srcdir)/include/axiom_allocator_l2.h $(top_srcdir)/include/axiom_allocator_l1.h $(top_srcdir)/include/dprintf.h
+include_HEADERS = $(top_srcdir)/include/axiom_allocator.h $(top_srcdir)/include/axiom_allocator_l2.h $(top_srcdir)/include/axiom_allocator_l1.h $(top_srcdir)/include/axiom_allocator_protocol.h
 noinst_HEADERS = axiom_allocator_l2_l3.h axiom_allocator_l1_l2.h axiom_allocator_l3/axiom_allocator_l3.h
