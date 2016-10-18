@@ -5,7 +5,7 @@
  * \date        2016-09-23
  *
  * This file contains the functions used in the axiom-init deamon to handle
- * the axiom-allocator messages.
+ * the AXIOM L1 allocator messages.
  */
 #include <stdio.h>
 #include <stdint.h>

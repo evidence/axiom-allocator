@@ -121,8 +121,8 @@ axiom_al2_release(axiom_dev_t *dev)
 }
 
 int
-axiom_al2_alloc_reply(axiom_dev_t *dev, axiom_node_id_t src_node,
-        size_t size, void *inmsg, axiom_alloc_msg_t *info)
+axiom_al2_alloc_reply(axiom_dev_t *dev, size_t size, void *inmsg,
+        axiom_alloc_msg_t *info)
 {
     axiom_err_t ret;
 
@@ -153,12 +153,12 @@ axiom_al2_alloc_reply(axiom_dev_t *dev, axiom_node_id_t src_node,
     al2_proto.status = AXL2ST_SETUP;
 
 reply:
-    return 0;
+    return 1;
 }
 
 int
-axiom_al2_alloc(axiom_dev_t *dev, axiom_node_id_t src_node,
-        axiom_port_t master_port, size_t size, void *buffer)
+axiom_al2_alloc(axiom_dev_t *dev, axiom_port_t master_port, size_t size,
+        void *buffer)
 {
     axiom_alloc_msg_t *info = (axiom_alloc_msg_t *)buffer;
     axiom_err_t ret;
