@@ -20,7 +20,7 @@ axiom_al12_get_appid(axiom_dev_t *dev, axiom_port_t reply_port)
     alloc_payload.command = AXIOM_CMD_ALLOC_APPID;
     alloc_payload.reply_port = reply_port;
 
-    ret = axiom_send_raw(dev, AXIOM_MASTER_NODE_INIT, AXIOM_RAW_PORT_INIT,
+    ret = axiom_send_raw(dev, AXIOM_INIT_MASTER_NODE, AXIOM_RAW_PORT_INIT,
             AXIOM_TYPE_RAW_DATA, sizeof(alloc_payload), &alloc_payload);
     if (!AXIOM_RET_IS_OK(ret)) {
         return ret;
@@ -45,7 +45,7 @@ axiom_al12_get_appid_reply(axiom_dev_t *dev, axiom_app_id_t *appid)
         return ret;
     }
 
-    if ((src != AXIOM_MASTER_NODE_INIT) ||
+    if ((src != AXIOM_INIT_MASTER_NODE) ||
             (payload.command != AXIOM_CMD_ALLOC_APPID_REPLY) ||
             (payload.info.error != AXIOM_RET_OK)) {
         EPRINTF("info.error: %d", payload.info.error);
@@ -70,7 +70,7 @@ axiom_al12_alloc(axiom_dev_t *dev, axiom_port_t reply_port, axiom_app_id_t appid
     alloc_payload.info.private_size = private_size;
     alloc_payload.info.shared_size = shared_size;
 
-    ret = axiom_send_raw(dev, AXIOM_MASTER_NODE_INIT, AXIOM_RAW_PORT_INIT,
+    ret = axiom_send_raw(dev, AXIOM_INIT_MASTER_NODE, AXIOM_RAW_PORT_INIT,
             AXIOM_TYPE_RAW_DATA, sizeof(alloc_payload), &alloc_payload);
     if (!AXIOM_RET_IS_OK(ret)) {
         return ret;
@@ -110,7 +110,7 @@ axiom_al12_release(axiom_dev_t *dev, axiom_app_id_t appid)
     alloc_payload.command = AXIOM_CMD_ALLOC_RELEASE;
     alloc_payload.info.app_id = appid;
 
-    ret = axiom_send_raw(dev, AXIOM_MASTER_NODE_INIT, AXIOM_RAW_PORT_INIT,
+    ret = axiom_send_raw(dev, AXIOM_INIT_MASTER_NODE, AXIOM_RAW_PORT_INIT,
             AXIOM_TYPE_RAW_DATA, sizeof(alloc_payload), &alloc_payload);
     if (!AXIOM_RET_IS_OK(ret)) {
         return ret;
