@@ -16,6 +16,13 @@
  * \{
  */
 
+/*! \brief Return value OK */
+#define AXAL_RET_OK             0
+/*! \brief Return value ERROR: generic error */
+#define AXAL_RET_ERROR          -1
+/*! \brief Return value NOMEM: memory not available */
+#define AXAL_RET_NOMEM          -2
+
 /*! \brief Type of L3 allocator to use
  *
  *  AXAL_SW = software implementation based on LMM

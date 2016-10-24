@@ -20,6 +20,7 @@
 #include "dprintf.h"
 
 #include "axiom_allocator_l1.h"
+#include "axiom_allocator_l1_l2.h"
 
 #include "evi_alloc.h"
 #include "evi_queue.h"

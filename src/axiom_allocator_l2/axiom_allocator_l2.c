@@ -18,6 +18,7 @@
 #include "axiom_allocator_protocol.h"
 #include "axiom_allocator_l2.h"
 #include "axiom_allocator_l1_l2.h"
+#include "axiom_allocator_l2_l3.h"
 
 
 /************************* Axiom Allocator L2 CORE ****************************/
@@ -80,6 +81,8 @@ typedef struct axiom_al2proto {
     axiom_app_id_t app_id;
     uintptr_t private_start;
     size_t private_size;
+    uintptr_t shared_start;
+    size_t shared_size;
     axiom_al2core_t al2_core;
 } axiom_al2proto_t;
 
@@ -149,6 +152,8 @@ axiom_al2_alloc_reply(axiom_dev_t *dev, size_t size, void *inmsg,
 
     al2_proto.private_start = info->private_start;
     al2_proto.private_size = info->private_size;
+    al2_proto.shared_start = info->shared_start;
+    al2_proto.shared_size = info->shared_size;
 
     al2_proto.status = AXL2ST_SETUP;
 
@@ -213,7 +218,7 @@ axiom_al2_alloc_appid(axiom_dev_t *dev, axiom_port_t master_port,
 }
 
 int
-axiom_al2_get_prblock(axiom_dev_t *dev, axiom_node_id_t src_node,
+axiom_al2_get_regions(axiom_dev_t *dev, axiom_node_id_t src_node,
         size_t size, void *buffer)
 {
     axiom_alloc_msg_t *info = (axiom_alloc_msg_t *)buffer;
@@ -228,13 +233,15 @@ axiom_al2_get_prblock(axiom_dev_t *dev, axiom_node_id_t src_node,
 
     info->private_start = al2_proto.private_start;
     info->private_size = al2_proto.private_size;
+    info->shared_start = al2_proto.shared_start;
+    info->shared_size = al2_proto.shared_size;
 
 reply:
     return 1;
 }
 
 int
-axiom_al2_get_shblock(axiom_dev_t *dev, axiom_node_id_t src_node,
+axiom_al2_alloc_shblock(axiom_dev_t *dev, axiom_node_id_t src_node,
         size_t size, void *buffer)
 {
     axiom_alloc_msg_t *info = (axiom_alloc_msg_t *)buffer;

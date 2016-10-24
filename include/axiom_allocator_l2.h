@@ -71,35 +71,35 @@ int axiom_al2_alloc_reply(axiom_dev_t *dev, size_t size, void *buffer,
         axiom_alloc_msg_t *info);
 
 /*!
- * \brief Require the size and address of the private region.
+ * \brief Require the size and address of the private and shared regions.
  *
  * \param dev           AXIOM device to send RAW/LONG/RDMA messages
  * \param src_node      Node ID that requires a private region
  * \param size          Size of buffer
  * \param[out] buffer   Buffer that contains the allocator message from L3.
  *                      The output message will contain the size and the address
- *                      of the private region.
+ *                      of the private and shared regions.
  *
  * \return Return a value != 0 when the buffer contains the reply to L3.
  *         In case of error, the error code is contained in the buffer.
  */
-int axiom_al2_get_prblock(axiom_dev_t *dev, axiom_node_id_t src_node,
+int axiom_al2_get_regions(axiom_dev_t *dev, axiom_node_id_t src_node,
         size_t size, void *buffer);
 
 /*!
- * \brief Require a new shared region.
+ * \brief Require a new shared block.
  *
  * \param dev            AXIOM device to send RAW/LONG/RDMA messages
  * \param src_node       Node ID that requires a new shared blocks
  * \param size           Size of buffer
  * \param[in|out] buffer Buffer that contains the allocator message from/to L3.
  *                       The input message must contain the size of required
- *                       region. The output message will contain the size and
+ *                       block. The output message will contain the size and
  *                       the address of the new shared blocks.
  *
  * \return Return a value != 0 when the buffer contains the reply to L3.
  *         In case of error, the error code is contained in the buffer.
  */
-int axiom_al2_get_shblock(axiom_dev_t *dev, axiom_node_id_t src_node,
+int axiom_al2_alloc_shblock(axiom_dev_t *dev, axiom_node_id_t src_node,
         size_t size, void *buffer);
 #endif /* AXIOM_ALLOCATOR_L2_h */
