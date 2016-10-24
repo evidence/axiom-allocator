@@ -52,6 +52,14 @@ AC_ARG_WITH([axiom-run-lib],
             [AXIOM_RUN_LIB_INCLUDE="$withval"])
 AC_SUBST([AXIOM_RUN_LIB])
 
+# evi-allocator
+AC_ARG_WITH([evi-allocator],
+            AS_HELP_STRING([--with-evi-allocator=dir], [Directory where evi-allocator is installed]),
+            [EVI_ALLOCATOR_INCLUDE="$withval"/include]
+            [EVI_ALLOCATOR_LIB="$withval"/lib])
+AC_SUBST([EVI_ALLOCATOR_INCLUDE])
+AC_SUBST([EVI_ALLOCATOR_LIB])
+
 # Checks for libraries.
 
 # Checks for header files.
