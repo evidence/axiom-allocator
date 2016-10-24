@@ -24,14 +24,14 @@
 
 typedef struct axiom_al2core {
     evi_alloc_t shared_alloc_table;
-    uint64_t shared_start;
-    uint64_t shared_size;
-    uint64_t shared_block_size;
+    uintptr_t shared_start;
+    size_t shared_size;
+    size_t shared_block_size;
 } axiom_al2core_t;
 
 static void
-axiom_al2core_init(axiom_al2core_t *l2, uint64_t shared_start,
-        uint64_t shared_size)
+axiom_al2core_init(axiom_al2core_t *l2, uintptr_t shared_start,
+        size_t shared_size)
 {
     l2->shared_start = shared_start;
     l2->shared_size = shared_size;
@@ -41,7 +41,7 @@ axiom_al2core_init(axiom_al2core_t *l2, uint64_t shared_start,
 }
 
 static int
-axiom_al2core_alloc(axiom_al2core_t *l2, uint64_t *addr, uint64_t *size,
+axiom_al2core_alloc(axiom_al2core_t *l2, uintptr_t *addr, size_t *size,
         axiom_node_id_t node_id)
 {
     int num_blocks, start;
@@ -56,7 +56,7 @@ axiom_al2core_alloc(axiom_al2core_t *l2, uint64_t *addr, uint64_t *size,
     if (start < 0)
         return start;
 
-    *addr = (((uint64_t)start) * l2->shared_block_size) + l2->shared_start;
+    *addr = (((uintptr_t)start) * l2->shared_block_size) + l2->shared_start;
 
     return 0;
 }
@@ -78,8 +78,8 @@ axiom_al2core_release(axiom_al2core_t *l2)
 typedef struct axiom_al2proto {
     enum {AXL2ST_INIT = 1, AXL2ST_ALLOC, AXL2ST_SETUP, AXL2ST_RELEASE} status;
     axiom_app_id_t app_id;
-    uint64_t private_start;
-    uint64_t private_size;
+    uintptr_t private_start;
+    size_t private_size;
     axiom_al2core_t al2_core;
 } axiom_al2proto_t;
 

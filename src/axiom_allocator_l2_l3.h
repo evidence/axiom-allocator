@@ -18,7 +18,7 @@
  *
  * \return Return the error code of operation. (0 if everything is OK)
  */
-int axiom_al23_init(uint64_t private_size, uint64_t shared_size);
+int axiom_al23_init(size_t private_size, size_t shared_size);
 
 /*!
  * \brief Get the private region. If it is called multiple times, it returns
@@ -29,7 +29,7 @@ int axiom_al23_init(uint64_t private_size, uint64_t shared_size);
  *
  * \return Return the error code of operation. (0 if everything is OK)
  */
-int axiom_al23_get_prregion(uint64_t *start, uint64_t *size);
+int axiom_al23_get_prregion(uintptr_t *start, size_t *size);
 
 /*!
  * \brief Require a new shared region.
@@ -39,6 +39,6 @@ int axiom_al23_get_prregion(uint64_t *start, uint64_t *size);
  *
  * \return Return the error code of operation. (0 if everything is OK)
  */
-int axiom_al23_req_shregion(uint64_t *start, uint64_t *size);
+int axiom_al23_req_shregion(uintptr_t *start, size_t *size);
 
 #endif /* !AXIOM_L2_ALLOCATOR_h */

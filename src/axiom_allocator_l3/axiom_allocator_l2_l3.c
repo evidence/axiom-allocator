@@ -50,7 +50,7 @@ axiom_al23_get_nodeids(axiom_node_id_t *master_nodeid,
 }
 
 int
-axiom_al23_init(uint64_t private_size, uint64_t shared_size)
+axiom_al23_init(size_t private_size, size_t shared_size)
 {
     axiom_err_t ret = AXIOM_RET_OK, err;
     axiom_node_id_t master_nodeid, local_nodeid;
@@ -90,7 +90,7 @@ axiom_al23_init(uint64_t private_size, uint64_t shared_size)
 }
 
 int
-axiom_al23_get_prregion(uint64_t *start, uint64_t *size)
+axiom_al23_get_prregion(uintptr_t *start, size_t *size)
 {
     axiom_alloc_msg_t info;
     size_t info_size = sizeof(info);
@@ -113,7 +113,7 @@ axiom_al23_get_prregion(uint64_t *start, uint64_t *size)
 }
 
 int
-axiom_al23_req_shregion(uint64_t *start, uint64_t *size)
+axiom_al23_req_shregion(uintptr_t *start, size_t *size)
 {
     axiom_alloc_msg_t info;
     size_t info_size = sizeof(info);

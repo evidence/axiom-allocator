@@ -49,13 +49,13 @@ axiom_al12_get_appid_reply(axiom_dev_t *dev, axiom_app_id_t *appid);
      */
 axiom_err_t
 axiom_al12_alloc(axiom_dev_t *dev, axiom_port_t reply_port, axiom_app_id_t appid,
-        uint64_t private_size, uint64_t shared_size);
+        size_t private_size, size_t shared_size);
 
 
 axiom_err_t
 axiom_al12_alloc_parsereply(void *payload, size_t payload_size,
-        uint64_t *private_start, uint64_t *private_size, uint64_t *shared_start,
-        uint64_t *shared_size);
+        uintptr_t *private_start, size_t *private_size, uintptr_t *shared_start,
+        size_t *shared_size);
 
     /*
      * \brief Request to the AXIOM_MASTER_NODE_INIT to release the application

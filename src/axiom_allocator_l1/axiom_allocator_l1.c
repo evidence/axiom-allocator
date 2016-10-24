@@ -26,9 +26,9 @@
 
 /************************* Axiom Allocator L1 CORE ****************************/
 typedef struct axiom_al1core {
-    uint64_t memory_start;
-    uint64_t memory_size;
-    uint64_t block_size;
+    uintptr_t memory_start;
+    size_t memory_size;
+    size_t block_size;
     evi_alloc_t alloc_table;
     evi_queue_t app_id;
 } axiom_al1core_t;
@@ -45,7 +45,7 @@ axiom_al1core_init(axiom_al1core_t *l1)
 }
 
 static int
-axiom_al1core_alloc(axiom_al1core_t *l1, uint64_t *addr, uint64_t *size,
+axiom_al1core_alloc(axiom_al1core_t *l1, uintptr_t *addr, size_t *size,
         axiom_app_id_t app_id)
 {
     int num_blocks, start;
@@ -60,7 +60,7 @@ axiom_al1core_alloc(axiom_al1core_t *l1, uint64_t *addr, uint64_t *size,
     if (start < 0)
         return start;
 
-    *addr = (((uint64_t)start) * l1->block_size) + l1->memory_start;
+    *addr = (((uintptr_t)start) * l1->block_size) + l1->memory_start;
 
     return 0;
 }
