@@ -45,4 +45,13 @@ int axiom_al23_get_regions(uintptr_t *private_start, size_t *privare_size,
  */
 int axiom_al23_alloc_shblock(uintptr_t *start, size_t *size);
 
+
+/*!
+ * \brief Get the application ID.
+ *
+ * \return Return the application ID or error code of operation.
+ *         (>=0 if everything is OK)
+ */
+int axiom_al23_get_appid(void);
+
 #endif /* !AXIOM_L2_ALLOCATOR_h */

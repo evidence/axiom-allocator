@@ -20,7 +20,7 @@ static int
 axiom_al3_sw_init(size_t shared_size, size_t private_size)
 {
     uintptr_t private_start, shared_start;
-    int ret;
+    int ret, appid;
 
     /* init L2 allocator */
     ret = axiom_al23_init(private_size, shared_size);
@@ -35,8 +35,14 @@ axiom_al3_sw_init(size_t shared_size, size_t private_size)
         return AXAL_RET_ERROR;
     }
 
+    /* take the application ID from L2 allocator */
+    appid = axiom_al23_get_appid();
+    if (appid < 0) {
+        return AXAL_RET_ERROR;
+    }
+
     /* init L3 allocator */
-    ret = evi_allocator_init(shared_start, shared_start + shared_size,
+    ret = evi_allocator_init(appid, shared_start, shared_start + shared_size,
             private_start, private_start + private_size);
     if (ret) {
         return AXAL_RET_ERROR;

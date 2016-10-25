@@ -56,12 +56,13 @@
 #include <sys/time.h>
 #include <string.h>
 #define _DPRINTF(type, _fmt, ... )\
-    do {                                                                       \
-        struct timeval _t0;                                                    \
-        gettimeofday(&_t0, NULL);                                              \
+    do {                                                                      \
+        struct timeval _t0;                                                   \
+        gettimeofday(&_t0, NULL);                                             \
         fprintf(stderr, "%03d.%06d %s[%d]: %s() - %s - message: " _fmt "%s\n",\
-                (int)(_t0.tv_sec % 1000), (int)_t0.tv_usec,                    \
-                __FILENAME__, __LINE__, __func__, type , __VA_ARGS__);         \
+                (int)(_t0.tv_sec % 1000), (int)_t0.tv_usec,                   \
+                __FILENAME__, __LINE__, __func__, type , __VA_ARGS__);        \
+        fflush(stderr);                                                       \
     } while (0);
 #endif /* __KERNEL */
 

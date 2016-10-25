@@ -135,3 +135,20 @@ axiom_al23_alloc_shblock(uintptr_t *start, size_t *size)
 
     return AXIOM_RET_OK;
 }
+
+int
+axiom_al23_get_appid(void)
+{
+    char *appid_s;
+    unsigned long appid = 0;
+
+    appid_s = getenv(AXIOM_ENV_ALLOC_APPID);
+    if (appid_s == NULL) {
+        EPRINTF("env %s not defined", AXIOM_ENV_ALLOC_APPID);
+        return AXIOM_RET_ERROR;
+    }
+
+    appid = strtoul(appid_s, NULL, 10);
+
+    return (axiom_app_id_t)(appid);
+}
