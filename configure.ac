@@ -56,9 +56,11 @@ AC_SUBST([AXIOM_RUN_LIB])
 AC_ARG_WITH([evi-allocator],
             AS_HELP_STRING([--with-evi-allocator=dir], [Directory where evi-allocator is installed]),
             [EVI_ALLOCATOR_INCLUDE="$withval"/include]
-            [EVI_ALLOCATOR_LIB="$withval"/lib])
+            [EVI_ALLOCATOR_LIB="$withval"/lib]
+            [EVI_ALLOCATOR_LDS="$withval"/axiom-evi-allocator-lib/xs_map64.lds])
 AC_SUBST([EVI_ALLOCATOR_INCLUDE])
 AC_SUBST([EVI_ALLOCATOR_LIB])
+AC_SUBST([EVI_ALLOCATOR_LDS])
 
 # Checks for libraries.
 

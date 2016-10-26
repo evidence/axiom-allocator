@@ -1,4 +1,5 @@
 AM_CFLAGS = -I$(top_srcdir)/include/
+AM_LDFLAGS = -Wl,-T@EVI_ALLOCATOR_LDS@
 
 if DEBUG
 AM_CFLAGS += -DPDEBUG
