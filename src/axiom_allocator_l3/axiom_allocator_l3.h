@@ -10,7 +10,7 @@
 #ifndef AXIOM_L3_ALLOCATOR_h
 #define AXIOM_L3_ALLOCATOR_h
 
-typedef int (*axiom_al3_alloc_init_t)(size_t private_size, size_t shared_size);
+typedef int (*axiom_al3_alloc_init_t)(size_t *private_size, size_t *shared_size);
 typedef void * (*axiom_al3_prmalloc_t)(size_t sz);
 typedef void * (*axiom_al3_shmalloc_t)(size_t sz);
 typedef void (*axiom_al3_shfree_t)(void *ptr);

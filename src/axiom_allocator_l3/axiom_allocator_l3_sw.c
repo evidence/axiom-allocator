@@ -17,20 +17,20 @@
 #include "evi_allocator.h"
 
 static int
-axiom_al3_sw_init(size_t shared_size, size_t private_size)
+axiom_al3_sw_init(size_t *shared_size, size_t *private_size)
 {
     uintptr_t private_start, shared_start;
     int ret, appid;
 
     /* init L2 allocator */
-    ret = axiom_al23_init(private_size, shared_size);
+    ret = axiom_al23_init(*private_size, *shared_size);
     if (ret) {
         return AXAL_RET_ERROR;
     }
 
     /* take private and shared region from L2 allocator */
-    ret = axiom_al23_get_regions(&private_start, &private_size, &shared_start,
-            &shared_size);
+    ret = axiom_al23_get_regions(&private_start, private_size, &shared_start,
+            shared_size);
     if (ret) {
         return AXAL_RET_ERROR;
     }
@@ -42,8 +42,8 @@ axiom_al3_sw_init(size_t shared_size, size_t private_size)
     }
 
     /* init L3 allocator */
-    ret = evi_allocator_init(appid, shared_start, shared_start + shared_size,
-            private_start, private_start + private_size);
+    ret = evi_allocator_init(appid, shared_start, shared_start + *shared_size,
+            private_start, private_start + *private_size);
     if (ret) {
         return AXAL_RET_ERROR;
     }

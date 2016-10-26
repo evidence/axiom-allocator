@@ -30,7 +30,7 @@ axiom_al3_register(axiom_al3_info_t *info)
 }
 
 int
-axiom_allocator_init(size_t private_size, size_t shared_size,
+axiom_allocator_init(size_t *private_size, size_t *shared_size,
         axiom_altype_t type)
 {
     int i, ret = -1;

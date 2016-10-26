@@ -14,7 +14,7 @@
 #include "dprintf.h"
 
 static int
-axiom_al3_hw_init(size_t shared_size, size_t private_size)
+axiom_al3_hw_init(size_t *shared_size, size_t *private_size)
 {
     DPRINTF("TODO");
     return 0;

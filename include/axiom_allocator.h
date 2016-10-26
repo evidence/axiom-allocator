@@ -33,13 +33,15 @@ typedef enum {AXAL_NONE = 0, AXAL_SW, AXAL_HW} axiom_altype_t;
 /**
  * \brief Initialize the allocator.
  *
- * \param private_size	maximum private memory size needed by the application
- * \param shared_size   maximum shared memory size needed by the application
+ * \param[in,out] private_size	maximum private memory size needed by the
+ *                              application
+ * \param[in,out] shared_size   maximum shared memory size needed by the
+ *                              application
  * \param type          type of allocator to use
  *
  * \return Return the error code of operation. (0 if everything is OK)
  */
-int axiom_allocator_init(size_t private_size, size_t shared_size,
+int axiom_allocator_init(size_t *private_size, size_t *shared_size,
         axiom_altype_t type);
 
 /**

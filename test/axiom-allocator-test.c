@@ -96,7 +96,7 @@ main(int argc, char **argv)
             sh_regsize, sh_mallocsize);
     printf("   allocator type (SW=1, HW=2) = %d\n", altype);
 
-    ret = axiom_allocator_init(pr_regsize, sh_regsize, altype);
+    ret = axiom_allocator_init(&pr_regsize, &sh_regsize, altype);
     if (ret) {
         EPRINTF("axiom_allocator_init error %d", ret);
         ret = -1;
