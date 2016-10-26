@@ -70,8 +70,13 @@ axiom_al3_sw_shmalloc(size_t sz)
         return addr;
     }
 
-    /* if L3 malloc fails, request a new shared block from L2 allocator */
-    block_size = AXIOM_ALLOCATOR_L2_BSIZE;
+    /*
+     * if L3 malloc fails, request a new shared block from L2 allocator
+     *
+     * NOTE: L3 need enough space to store the size of allocated memory, so
+     * sizeof(sz) is ok.
+     */
+    block_size = sz + sizeof(sz);
     ret = axiom_al23_alloc_shblock(&block_addr, &block_size);
     if (ret) {
         return NULL;
