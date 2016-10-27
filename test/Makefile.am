@@ -1,4 +1,4 @@
-AM_CFLAGS = -I$(top_srcdir)/include/
+AM_CFLAGS = -I$(top_srcdir)/include/ -I@AXIOM_EVI_NIC_INCLUDE@
 AM_LDFLAGS = -Wl,-T@EVI_ALLOCATOR_LDS@
 
 if DEBUG
