@@ -8,13 +8,22 @@
  */
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdint.h>
 
 #include "axiom_allocator.h"
 #include "axiom_allocator_l3.h"
 #include "dprintf.h"
 
 static int
-axiom_al3_hw_init(size_t *private_size, size_t *shared_size)
+axiom_al3_hw_init(uintptr_t private_start, size_t private_size,
+        uintptr_t shared_start, size_t shared_size)
+{
+    DPRINTF("TODO");
+    return 0;
+}
+
+static int
+axiom_al3_hw_addshreg(uintptr_t block_addr, size_t block_size)
 {
     DPRINTF("TODO");
     return 0;
@@ -49,12 +58,14 @@ axiom_al3_hw_shfree(void *ptr)
 }
 
 static axiom_al3_info_t axiom_al3hw_info = {
-    .alloc_init = axiom_al3_hw_init,
+    .init = axiom_al3_hw_init,
+    .add_shregion = axiom_al3_hw_addshreg,
     .private_malloc = axiom_al3_hw_prmalloc,
     .shared_malloc = axiom_al3_hw_shmalloc,
     .private_free = axiom_al3_hw_prfree,
     .shared_free = axiom_al3_hw_shfree,
     .type = AXAL_HW,
+    .overhead = 0,
 };
 
 static void axiom_al3hw_register(void) {

@@ -6,11 +6,19 @@
  *
  * This file contains the implementation of axiom-allocator API.
  */
+#include <fcntl.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <stdio.h>
+#include <stropts.h>
+
+#include <sys/mman.h>
+#include <sys/ioctl.h>
+#include <axiom_mem_dev_user.h>
 
 #include "axiom_allocator.h"
 #include "axiom_allocator_l3/axiom_allocator_l3.h"
+#include "axiom_allocator_l2_l3.h"
 #include "dprintf.h"
 
 static axiom_al3_info_t al3_info;
@@ -18,6 +26,21 @@ static axiom_al3_info_t al3_info;
 #define MAX_INFO_TABLE  2
 static axiom_al3_info_t info_table[MAX_INFO_TABLE];
 static int info_table_used = 0;
+
+static struct axiom_allocator_s {
+    int mem_dev_fd;
+    uintptr_t vaddr_start;
+    uintptr_t vaddr_end;
+} al3_status;
+
+#define USE_EXT_LDSCRIPT
+#ifdef USE_EXT_LDSCRIPT
+extern unsigned long __ld_shm_info_start_addr;
+extern unsigned long __ld_shm_info_end_addr;
+#else
+unsigned long __ld_shm_info_start_addr = 0x4000000000;
+unsigned long __ld_shm_info_end_addr = 0x4040000000;
+#endif
 
 void
 axiom_al3_register(axiom_al3_info_t *info)
@@ -29,27 +52,115 @@ axiom_al3_register(axiom_al3_info_t *info)
     }
 }
 
+static axiom_al3_info_t *
+axiom_al3_find_type(axiom_altype_t type)
+{
+    int i;
+
+    for (i = 0; i < info_table_used; i++) {
+        if (info_table[i].type == type) {
+            return &info_table[i];
+        }
+    }
+
+    return NULL;
+}
+
 int
 axiom_allocator_init(size_t *private_size, size_t *shared_size,
         axiom_altype_t type)
 {
-    int i, ret = -1;
+    uintptr_t private_start, shared_start;
+    struct axiom_mem_dev_info memreq;
+    axiom_al3_info_t *info;
+    int ret, appid;
 
-    for (i = 0; i < info_table_used; i++) {
-        if (info_table[i].type == type) {
-            ret = 0;
-            break;
-        }
-    }
-
-    if (ret != 0) {
+    /* find L3 type */
+    info = axiom_al3_find_type(type);
+    if (info == NULL) {
         EPRINTF("type %d not found!", type);
-        return ret;
+        return AXAL_RET_ERROR;
+    }
+    al3_info = *info;
+
+    /* init L2 allocator */
+    ret = axiom_al23_init(*private_size, *shared_size);
+    if (ret) {
+        return AXAL_RET_ERROR;
     }
 
-    al3_info = info_table[i];
+    /* take private and shared region from L2 allocator */
+    ret = axiom_al23_get_regions(&private_start, private_size, &shared_start,
+            shared_size);
+    if (ret) {
+        return AXAL_RET_ERROR;
+    }
 
-    return al3_info.alloc_init(private_size, shared_size);
+    /* take the application ID from L2 allocator */
+    appid = axiom_al23_get_appid();
+    if (appid < 0) {
+        return AXAL_RET_ERROR;
+    }
+
+    /* open axiom memory device to configure the mapping */
+    ret = open("/dev/axiom_dev_mem0", O_RDWR);
+    if (ret < 0) {
+        return AXAL_RET_ERROR;
+    }
+    al3_status.mem_dev_fd = ret;
+
+    al3_status.vaddr_start = (uintptr_t)__ld_shm_info_start_addr;
+    al3_status.vaddr_end = (uintptr_t)__ld_shm_info_end_addr;
+
+    /* add the vaddr offset to the addresses */
+    private_start += al3_status.vaddr_start;
+    shared_start += al3_status.vaddr_start;
+
+#ifdef USE_EXT_LDSCRIPT
+    ret = mprotect((void *)(al3_status.vaddr_start), al3_status.vaddr_end -
+            al3_status.vaddr_start, PROT_NONE);
+    if (ret) {
+	perror("mprotect");
+	return ret;
+    }
+#endif
+
+    /* set up the memory mapping */
+    memreq.base = al3_status.vaddr_start;
+    memreq.size = al3_status.vaddr_end - al3_status.vaddr_start;
+    ret = ioctl(al3_status.mem_dev_fd, AXIOM_MEM_DEV_CONFIG_VMEM, &memreq);
+    if (ret) {
+	perror("ioctl");
+	return ret;
+    }
+
+    /* set the application ID */
+    ret = ioctl(al3_status.mem_dev_fd, AXIOM_MEM_DEV_SET_APP_ID, &appid);
+    if (ret) {
+	perror("ioctl");
+	return ret;
+    }
+
+    /* map the private region in the virtual address */
+    memreq.base = private_start;
+    memreq.size = *private_size;
+    ret = ioctl(al3_status.mem_dev_fd, AXIOM_MEM_DEV_RESERVE_MEM, &memreq);
+    if (ret) {
+	perror("ioctl");
+	return ret;
+    }
+
+    /* map the shared region in the virtual address */
+    memreq.base = shared_start;
+    memreq.size = *shared_size;
+    ret = ioctl(al3_status.mem_dev_fd, AXIOM_MEM_DEV_RESERVE_MEM, &memreq);
+    if (ret) {
+	perror("ioctl");
+	return ret;
+    }
+
+    return al3_info.init(private_start, *private_size, shared_start,
+            *shared_size);
 }
 
 void *
@@ -61,6 +172,36 @@ axiom_private_malloc(size_t sz)
 void *
 axiom_shared_malloc(size_t sz)
 {
+    uintptr_t block_addr;
+    size_t block_size;
+    void *addr;
+    int ret;
+
+    addr = al3_info.shared_malloc(sz);
+    if (addr) {
+        return addr;
+    }
+
+    /*
+     * if L3 malloc fails, request a new shared block from L2 allocator
+     *
+     * NOTE: L3 need enough space to store the size of allocated memory, so
+     * sizeof(sz) is ok.
+     */
+    block_size = sz + sizeof(sz);
+    ret = axiom_al23_alloc_shblock(&block_addr, &block_size);
+    if (ret) {
+        return NULL;
+    }
+
+    /* add the new block to L3 allocator */
+    ret = al3_info.add_shregion(block_addr + al3_status.vaddr_start,
+            block_size);
+    if (ret) {
+        return NULL;
+    }
+
+    /* retry L3 allocation */
     return al3_info.shared_malloc(sz);
 }
 
