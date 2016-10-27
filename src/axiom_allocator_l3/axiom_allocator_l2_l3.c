@@ -73,7 +73,7 @@ axiom_al23_init(size_t private_size, size_t shared_size)
         err = axrun_rpc(AXRUN_RPC_ALLOC, info_size, &info, &info_size, &info,
                 verbose);
         if (err < 0 || !AXIOM_RET_IS_OK(info.error)) {
-            EPRINTF("axrun_rpc error %d", err);
+            EPRINTF("axrun_rpc ret %d info.error %d", err, info.error);
             ret = AXIOM_RET_NOMEM;
         }
 
@@ -101,7 +101,7 @@ axiom_al23_get_regions(uintptr_t *private_start, size_t *private_size,
     ret = axrun_rpc(AXRUN_RPC_GET_REGIONS, info_size, &info, &info_size, &info,
             verbose);
     if (ret < 0 || !AXIOM_RET_IS_OK(info.error)) {
-        EPRINTF("axrun_rpc error %d", ret);
+        EPRINTF("axrun_rpc ret %d info.error %d", ret, info.error);
         return AXIOM_RET_NOMEM;
     }
 
@@ -126,7 +126,7 @@ axiom_al23_alloc_shblock(uintptr_t *start, size_t *size)
     ret = axrun_rpc(AXRUN_RPC_ALLOC_SHBLOCK, info_size, &info, &info_size, &info,
             verbose);
     if (ret < 0 || !AXIOM_RET_IS_OK(info.error)) {
-        EPRINTF("axrun_rpc error %d", ret);
+        EPRINTF("axrun_rpc ret %d info.error %d", ret, info.error);
         return AXIOM_RET_NOMEM;
     }
 
