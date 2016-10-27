@@ -17,7 +17,7 @@
 #include "evi_allocator.h"
 
 static int
-axiom_al3_sw_init(size_t *shared_size, size_t *private_size)
+axiom_al3_sw_init(size_t *private_size, size_t *shared_size)
 {
     uintptr_t private_start, shared_start;
     int ret, appid;
