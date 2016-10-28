@@ -72,6 +72,7 @@ axiom_allocator_init(size_t *private_size, size_t *shared_size,
 {
     uintptr_t private_start, shared_start;
     struct axiom_mem_dev_info memreq;
+    struct axiom_mem_dev_app memapp;
     axiom_al3_info_t *info;
     int ret, appid;
 
@@ -134,26 +135,25 @@ axiom_allocator_init(size_t *private_size, size_t *shared_size,
 	return ret;
     }
 
-    /* set the application ID */
-    ret = ioctl(al3_status.mem_dev_fd, AXIOM_MEM_DEV_SET_APP_ID, &appid);
-    if (ret) {
-	perror("ioctl");
-	return ret;
-    }
+    memapp.app_id = appid;
+    memapp.used_regions = 0;
 
     /* map the private region in the virtual address */
-    memreq.base = private_start;
-    memreq.size = *private_size;
-    ret = ioctl(al3_status.mem_dev_fd, AXIOM_MEM_DEV_RESERVE_MEM, &memreq);
-    if (ret) {
-	perror("ioctl");
-	return ret;
+    if (*private_size > 0) {
+        memapp.info[memapp.used_regions].base = private_start;
+        memapp.info[memapp.used_regions].size = *private_size;
+        memapp.used_regions++;
     }
 
     /* map the shared region in the virtual address */
-    memreq.base = shared_start;
-    memreq.size = *shared_size;
-    ret = ioctl(al3_status.mem_dev_fd, AXIOM_MEM_DEV_RESERVE_MEM, &memreq);
+    if (*shared_size > 0) {
+        memapp.info[memapp.used_regions].base = shared_start;
+        memapp.info[memapp.used_regions].size = *shared_size;
+        memapp.used_regions++;
+    }
+
+    /* set the application ID and regions */
+    ret = ioctl(al3_status.mem_dev_fd, AXIOM_MEM_DEV_SET_APP, &memapp);
     if (ret) {
 	perror("ioctl");
 	return ret;
@@ -177,6 +177,7 @@ axiom_shared_malloc(size_t sz)
     void *addr;
     int ret;
 
+    /* TODO: Do we need to add a mutex to protect this function? */
     addr = al3_info.shared_malloc(sz);
     if (addr) {
         return addr;
