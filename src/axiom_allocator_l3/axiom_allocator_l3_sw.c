@@ -42,10 +42,12 @@ axiom_al3_sw_init(uintptr_t private_start, size_t private_size,
         return AXAL_RET_ERROR;
     }
 
-    ret = evi_lmm_add_reg(&al3sw.almm, (void *)private_start, private_size,
-            EVI_PRIVATE_MEM, AXAL_LMM_DEFAULT_PRIO);
-    if (ret != EVI_LMM_OK) {
-        return AXAL_RET_ERROR;
+    if (private_size > 0) {
+        ret = evi_lmm_add_reg(&al3sw.almm, (void *)private_start, private_size,
+                EVI_PRIVATE_MEM, AXAL_LMM_DEFAULT_PRIO);
+        if (ret != EVI_LMM_OK) {
+            return AXAL_RET_ERROR;
+        }
     }
 
     return AXAL_RET_OK;

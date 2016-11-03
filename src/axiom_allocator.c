@@ -87,6 +87,7 @@ axiom_allocator_init(size_t *private_size, size_t *shared_size,
     /* init L2 allocator */
     ret = axiom_al23_init(*private_size, *shared_size);
     if (ret) {
+        EPRINTF("axiom_al23_init - ret: %d", ret);
         return AXAL_RET_ERROR;
     }
 
@@ -94,18 +95,21 @@ axiom_allocator_init(size_t *private_size, size_t *shared_size,
     ret = axiom_al23_get_regions(&private_start, private_size, &shared_start,
             shared_size);
     if (ret) {
+        EPRINTF("axiom_al23_get_regions - ret: %d", ret);
         return AXAL_RET_ERROR;
     }
 
     /* take the application ID from L2 allocator */
     appid = axiom_al23_get_appid();
     if (appid < 0) {
+        EPRINTF("axiom_al23_get_appid - ret: %d", appid);
         return AXAL_RET_ERROR;
     }
 
     /* open axiom memory device to configure the mapping */
     ret = open("/dev/axiom_dev_mem0", O_RDWR);
     if (ret < 0) {
+        perror("open");
         return AXAL_RET_ERROR;
     }
     al3_status.mem_dev_fd = ret;
