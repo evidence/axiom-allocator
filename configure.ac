@@ -32,46 +32,67 @@ AC_ARG_ENABLE(debug,
 AM_CONDITIONAL(DEBUG, test x"$debug" = x"true")
 
 # axiom-evi-nic header file
-AXIOM_EVI_NIC_INCLUDE="`pwd`/../axiom-evi-nic/include"
-AC_ARG_WITH([axiom-evi-nic],
-            AS_HELP_STRING([--with-axiom-evi-nic=dir], [Include directory for axiom-evi-nic]),
-            [AXIOM_EVI_NIC_INCLUDE="$withval"])
-AC_SUBST([AXIOM_EVI_NIC_INCLUDE])
+#AXIOM_EVI_NIC_INCLUDE="`pwd`/../axiom-evi-nic/include"
+#AC_ARG_WITH([axiom-evi-nic],
+#            AS_HELP_STRING([--with-axiom-evi-nic=dir], [Include directory for axiom-evi-nic]),
+#            [AXIOM_EVI_NIC_INCLUDE="$withval"])
+#AC_SUBST([AXIOM_EVI_NIC_INCLUDE])
 
 # axiom-evi-apps header file
-AXIOM_EVI_APPS_INCLUDE="`pwd`/../axiom-evi-apps/include"
-AC_ARG_WITH([axiom-evi-apps],
-            AS_HELP_STRING([--with-axiom-evi-apps=dir], [Include directory for axiom-evi-apps]),
-            [AXIOM_EVI_APPS_INCLUDE="$withval"])
-AC_SUBST([AXIOM_EVI_APPS_INCLUDE])
+#AXIOM_EVI_APPS_INCLUDE="`pwd`/../axiom-evi-apps/include"
+#AC_ARG_WITH([axiom-evi-apps],
+#            AS_HELP_STRING([--with-axiom-evi-apps=dir], [Include directory for axiom-evi-apps]),
+#            [AXIOM_EVI_APPS_INCLUDE="$withval"])
+#AC_SUBST([AXIOM_EVI_APPS_INCLUDE])
 
 # axiom-run-lib
-AXIOM_RUN_LIB="`pwd`/../axiom-evi-apps/axiom-run/lib"
-AC_ARG_WITH([axiom-run-lib],
-            AS_HELP_STRING([--with-axiom-run-lib=dir], [Directory for axiom-run-lib]),
-            [AXIOM_RUN_LIB_INCLUDE="$withval"])
-AC_SUBST([AXIOM_RUN_LIB])
+#AXIOM_RUN_LIB="`pwd`/../axiom-evi-apps/axiom-run/lib"
+#AC_ARG_WITH([axiom-run-lib],
+#            AS_HELP_STRING([--with-axiom-run-lib=dir], [Directory for axiom-run-lib]),
+#            [AXIOM_RUN_LIB_INCLUDE="$withval"])
+#AC_SUBST([AXIOM_RUN_LIB])
 
 # evi-allocator
-AC_ARG_WITH([evi-allocator],
-            AS_HELP_STRING([--with-evi-allocator=dir], [Directory where evi-allocator is installed]),
-            [EVI_ALLOCATOR_INCLUDE="$withval"/include]
-            [EVI_ALLOCATOR_LIB="$withval"/lib]
-            [EVI_ALLOCATOR_LDS="$withval"/axiom-evi-allocator-lib/xs_map64.lds])
-AC_SUBST([EVI_ALLOCATOR_INCLUDE])
-AC_SUBST([EVI_ALLOCATOR_LIB])
-AC_SUBST([EVI_ALLOCATOR_LDS])
+#AC_ARG_WITH([evi-allocator],
+#            AS_HELP_STRING([--with-evi-allocator=dir], [Directory where evi-allocator is installed]),
+#            [EVI_ALLOCATOR_INCLUDE="$withval"/include]
+#            [EVI_ALLOCATOR_LIB="$withval"/lib]
+#            [EVI_ALLOCATOR_LDS="$withval"/axiom-evi-allocator-lib/xs_map64.lds])
+#AC_SUBST([EVI_ALLOCATOR_INCLUDE])
+#AC_SUBST([EVI_ALLOCATOR_LIB])
+#AC_SUBST([EVI_ALLOCATOR_LDS])
 
 # axiom-dev-mem header file
-AXIOM_MEM_DEV_INC="/usr/include"
-AC_ARG_WITH([axiom-mem-dev],
-           AS_HELP_STRING([--with-axiom-mem-dev=dir], [Include directory fo axiom-mem-dev]),
-           [AXIOM_MEM_DEV_INC="$withval"]
-)
-AC_SUBST([AXIOM_MEM_DEV_INC])
-
+#AXIOM_MEM_DEV_INC="/usr/include"
+#AC_ARG_WITH([axiom-mem-dev],
+#           AS_HELP_STRING([--with-axiom-mem-dev=dir], [Include directory for axiom-mem-dev]),
+#           [AXIOM_MEM_DEV_INC="$withval"]
+#)
+#AC_SUBST([AXIOM_MEM_DEV_INC])
 
 # Checks for libraries.
+
+AXIOM_SYSROOT="`pwd`/../output/staging"
+AC_ARG_WITH([axiom-sysroot],
+            AS_HELP_STRING([--with-axiom-sysroot=dir], [Sysroot directory for AXIOM]),	    
+            [AXIOM_SYSROOT="$withval"])
+AC_SUBST([AXIOM_SYSROOT])
+export PKG_CONFIG_PATH=
+AC_SUBST([PKG_CONFIG_PATH])
+export PKG_CONFIG_LIBDIR="$AXIOM_SYSROOT/usr/lib/pkgconfig:$AXIOM_SYSROOT/usr/share/pkgconfig"
+AC_SUBST([PKG_CONFIG_LIBDIR])
+export PKG_CONFIG_SYSROOT_DIR="$AXIOM_SYSROOT"
+AC_SUBST([PKG_CONFIG_SYSROOT_DIR])
+PKG_PROG_PKG_CONFIG([0.28])
+
+# debug :-)
+#echo AXIOM_SYSROOT=${AXIOM_SYSROOT}
+#echo PKG_CONFIG_PATH=${PKG_CONFIG_PATH}
+#echo PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR}
+#echo PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR}
+
+PKG_CHECK_MODULES([axiom_libraries],[axiom_run_api >= 0.9 axiom_init_api >= 0.9 axiom_user_api >= 0.9])
+PKG_CHECK_MODULES([evidence_lmm],[evi_lmm >= 0.1])
 
 # Checks for header files.
 AC_CHECK_HEADERS([stdint.h stdlib.h string.h sys/time.h])
@@ -85,6 +106,7 @@ AC_TYPE_UINT8_T
 AC_CHECK_FUNCS([gettimeofday strrchr])
 
 AC_CONFIG_FILES([Makefile
+		 axiom_allocator.pc
                  src/Makefile
                  test/Makefile])
 AC_OUTPUT

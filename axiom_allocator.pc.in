@@ -1,0 +1,11 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: Axiom allocator library
+Description: Axiom allocator library description
+Version: @VERSION@
+
+Libs: -L${libdir} -laxiom_allocator
+Cflags: -I${includedir}
