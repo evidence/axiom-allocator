@@ -9,6 +9,8 @@
 #ifndef AXIOM_ALLOCATOR_L1_h
 #define AXIOM_ALLOCATOR_L1_h
 
+#include "axiom_allocator_protocol.h"
+
 /*!
  * \defgroup AXIOM_ALLOCATOR
  *

@@ -9,6 +9,8 @@
 #ifndef AXIOM_ALLOCATOR_L1_L2_h
 #define AXIOM_ALLOCATOR_L1_L2_h
 
+#include "axiom_allocator_protocol.h"
+
 /*! \brief Axiom allocator: RDMA memory size    1 GB */
 #define AXIOM_ALLOCATOR_MEM_SIZE                (1 << 30)
 /*! \brief Axiom allocator: RDMA memory start */

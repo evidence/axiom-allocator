@@ -27,4 +27,12 @@ typedef struct axiom_alloc_msg {
     uint8_t  spare[7];
 } axiom_alloc_msg_t;
 
+/*! \brief Message payload for the axiom allocator */
+typedef struct axiom_allocator_payload {
+    uint8_t  command;           /*!< \brief Command of allocator messages */
+    uint8_t  reply_port;        /*!< \brief Port where to reply */
+    uint8_t  padding[5];
+    axiom_alloc_msg_t info;
+} axiom_allocator_payload_t;
+
 #endif /* !AXIOM_ALLOCATOR_PROTOCOL_h */
