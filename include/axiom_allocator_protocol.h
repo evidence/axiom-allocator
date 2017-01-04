@@ -14,8 +14,6 @@
 /* environment variables exported by axiom-run to the applications */
 /*! \brief node ID where runs the master application */
 #define AXIOM_ENV_ALLOC_APPMASTER       "AXIOM_ALLOC_APPMASTER"
-/*! \brief unique application ID */
-#define AXIOM_ENV_ALLOC_APPID           "AXIOM_ALLOC_APPID"
 
 typedef struct axiom_alloc_msg {
     uint64_t shared_start;      /*!< \brief Start address of shared region */
