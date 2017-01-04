@@ -105,6 +105,8 @@ axiom_al23_get_regions(uintptr_t *private_start, size_t *private_size,
         return AXIOM_RET_NOMEM;
     }
 
+    //fprintf(stderr,"HERE 0x%lx %d %d\n",info.private_start,sizeof(uint64_t),sizeof(uintptr_t));
+    
     *private_start = info.private_start;
     *private_size = info.private_size;
     *shared_start = info.shared_start;

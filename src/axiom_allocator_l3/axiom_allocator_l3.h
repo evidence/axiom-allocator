@@ -41,10 +41,20 @@ void axiom_al3_register(axiom_al3_info_t *info);
 
 
 
-#define module_init(function)                                               \
-__attribute__((constructor)) static void do_init_ ## function(void)         \
-{                                                                           \
-    function();                                                             \
-}
+#define module_init(function) \
+ __attribute__ ((section (".init.axiom_allocator"))) void *axiom_init_func_ ## function = function;
 
+//#define module_init(function)						\
+//static void do_init_ ## function(void)				\
+//{									\
+//    function();							\
+//}									\
+// __attribute__ ((section (".init.axiom_allocator"))) void *foo_ ## function = do_init_ ## function;
+//  /*
+//__attribute__((constructor)) static void do_init_ ## function(void)	\
+//{									\
+//    function();							\
+//}
+//  */
+  
 #endif /* !AXIOM_L3_ALLOCATOR_h */
