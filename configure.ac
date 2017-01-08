@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([axiom_allocator], [v0.8], [BUG-REPORT-ADDRESS])
+AC_INIT([axiom_allocator], [0.8], [BUG-REPORT-ADDRESS])
 
 AM_INIT_AUTOMAKE([-Wall -Werror foreign subdir-objects])
 
