@@ -81,7 +81,8 @@ axiom_allocator_init(size_t *private_size, size_t *shared_size,
     axiom_al3_info_t *info;
     int ret, appid;
 
-    /* */
+    /* call L3 registration functions */
+    /* rationale: resolve C++ initialization FIASCO */
     call_t *f;
     call_t fn;
     for (f = axiom_allocator_start; f < axiom_allocator_end; f++) {
@@ -98,18 +99,15 @@ axiom_allocator_init(size_t *private_size, size_t *shared_size,
     al3_info = *info;
 
     /* init L2 allocator */
-    //fprintf(stderr,"1- size private=%ld shared=%ld\n",*private_size, *shared_size);
     ret = axiom_al23_init(*private_size, *shared_size);
     if (ret) {
         EPRINTF("axiom_al23_init - ret: %d", ret);
         return AXAL_RET_ERROR;
     }
-    //fprintf(stderr,"2- size private=%ld shared=%ld\n",*private_size, *shared_size);
 
     /* take private and shared region from L2 allocator */
     ret = axiom_al23_get_regions(&private_start, private_size, &shared_start,
             shared_size);
-    //fprintf(stderr,"private_start=0x%lx\n",private_start);
     if (ret) {
         EPRINTF("axiom_al23_get_regions - ret: %d", ret);
         return AXAL_RET_ERROR;
@@ -136,7 +134,6 @@ axiom_allocator_init(size_t *private_size, size_t *shared_size,
     /* add the vaddr offset to the addresses */
     private_start += al3_status.vaddr_start;
     shared_start += al3_status.vaddr_start;
-    //fprintf(stderr,"base=0x%lx B\n",private_start);
 
 #ifdef USE_EXT_LDSCRIPT
     ret = mprotect((void *)(al3_status.vaddr_start), al3_status.vaddr_end -
@@ -151,12 +148,10 @@ axiom_allocator_init(size_t *private_size, size_t *shared_size,
     memreq.base = al3_status.vaddr_start;
     memreq.size = al3_status.vaddr_end - al3_status.vaddr_start;
     ret = ioctl(al3_status.mem_dev_fd, AXIOM_MEM_DEV_CONFIG_VMEM, &memreq);
-    //fprintf(stderr,"base=0x%lx size=0x%lx\n",memreq.base,memreq.size);
     if (ret) {
 	perror("ioctl");
 	return ret;
     }
-    //fprintf(stderr,"DONE!\n");
 
     memapp.app_id = appid;
     memapp.used_regions = 0;
@@ -177,12 +172,10 @@ axiom_allocator_init(size_t *private_size, size_t *shared_size,
 
     /* set the application ID and regions */
     ret = ioctl(al3_status.mem_dev_fd, AXIOM_MEM_DEV_SET_APP, &memapp);
-    //fprintf(stderr,"ba=0x%lx si=0x%lx  id=%d\n",private_start,*private_size,appid);
     if (ret) {
 	perror("ioctl");
 	return ret;
     }
-    //fprintf(stderr,"DONE2!\n");
 
     return al3_info.init(private_start, *private_size, shared_start,
             *shared_size);
