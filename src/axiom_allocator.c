@@ -24,6 +24,59 @@
 #include "axiom_allocator_l2_l3.h"
 #include "dprintf.h"
 
+#ifdef AXIOM_EXTRAE_SUPPORT
+#include <extrae_types.h>
+#include <extrae_user_events.h>
+static extrae_type_t axiom_extrae_apimem = 9990001;
+static int axiom_extrae_apimem_init = 0;
+
+typedef enum {
+    AX_EXTRAE_APIMEM_END,
+    AX_EXTRAE_APIMEM_INIT,
+    AX_EXTRAE_APIMEM_PMALLOC,
+    AX_EXTRAE_APIMEM_SMALLOC,
+    AX_EXTRAE_APIMEM_PFREE,
+    AX_EXTRAE_APIMEM_SFREE,
+    AX_EXTRAE_APIMEM_LAST
+} axiom_extrae_apimem_t;
+
+char* axiom_extrae_apimem_desc[] = {
+    "axiom_allocator_init()",
+    "axiom_private_malloc",
+    "axiom_shared_malloc",
+    "axiom_private_free",
+    "axiom_shared_free",
+};
+
+void axiom_extrae_init(extrae_type_t *type, char *name, char **val_desc,
+        unsigned val_num, int *initialized) {
+    if (!(*initialized) && Extrae_is_initialized()) {
+        extrae_value_t *values = malloc(sizeof(*values) *val_num);
+        int i;
+
+        for (i = 0; i < val_num; i++)
+            values[i] = i + 1;
+
+        Extrae_define_event_type(type, name, &val_num, values, val_desc);
+
+        IPRINTF(1, "%s - extrae initialized", name);
+
+        free(values);
+
+        *initialized = 1;
+    }
+}
+#define AXIOM_EXTRAE(f)                                                 \
+    do {                                                                \
+        axiom_extrae_init(&axiom_extrae_apimem, "AXIOM Allocator API",  \
+                axiom_extrae_apimem_desc, AX_EXTRAE_APIMEM_LAST - 1,    \
+                &axiom_extrae_apimem_init);                             \
+        f;                                                              \
+    } while(0);
+#else
+#define AXIOM_EXTRAE(f)
+#endif
+
 static axiom_al3_info_t al3_info;
 
 #define MAX_INFO_TABLE  2
@@ -84,6 +137,8 @@ axiom_allocator_init(size_t *private_size, size_t *shared_size,
     axiom_al3_info_t *info;
     int ret, appid;
 
+    AXIOM_EXTRAE(Extrae_event(axiom_extrae_apimem, AX_EXTRAE_APIMEM_INIT));
+
     /* call L3 registration functions */
     /* rationale: resolve C++ initialization FIASCO */
     call_t *f;
@@ -97,7 +152,8 @@ axiom_allocator_init(size_t *private_size, size_t *shared_size,
     info = axiom_al3_find_type(type);
     if (info == NULL) {
         EPRINTF("type %d not found!", type);
-        return AXAL_RET_ERROR;
+        ret = AXAL_RET_ERROR;
+        goto end;
     }
     al3_info = *info;
 
@@ -105,7 +161,8 @@ axiom_allocator_init(size_t *private_size, size_t *shared_size,
     ret = axiom_al23_init(*private_size, *shared_size);
     if (ret) {
         EPRINTF("axiom_al23_init - ret: %d", ret);
-        return AXAL_RET_ERROR;
+        ret = AXAL_RET_ERROR;
+        goto end;
     }
 
     /* take private and shared region from L2 allocator */
@@ -113,21 +170,24 @@ axiom_allocator_init(size_t *private_size, size_t *shared_size,
             shared_size);
     if (ret) {
         EPRINTF("axiom_al23_get_regions - ret: %d", ret);
-        return AXAL_RET_ERROR;
+        ret = AXAL_RET_ERROR;
+        goto end;
     }
 
     /* take the application ID from L2 allocator */
     appid = axiom_al23_get_appid();
     if (appid < 0) {
         EPRINTF("axiom_al23_get_appid - ret: %d", appid);
-        return AXAL_RET_ERROR;
+        ret = AXAL_RET_ERROR;
+        goto end;
     }
 
     /* open axiom memory device to configure the mapping */
     ret = open("/dev/axiom_dev_mem0", O_RDWR);
     if (ret < 0) {
         perror("open");
-        return AXAL_RET_ERROR;
+        ret = AXAL_RET_ERROR;
+        goto end;
     }
     al3_status.mem_dev_fd = ret;
 
@@ -142,8 +202,9 @@ axiom_allocator_init(size_t *private_size, size_t *shared_size,
     ret = mprotect((void *)(al3_status.vaddr_start), al3_status.vaddr_end -
             al3_status.vaddr_start, PROT_NONE);
     if (ret) {
-	perror("mprotect");
-	return ret;
+        perror("mprotect");
+        ret = AXAL_RET_ERROR;
+        goto end;
     }
 #endif
 
@@ -152,8 +213,9 @@ axiom_allocator_init(size_t *private_size, size_t *shared_size,
     memreq.size = al3_status.vaddr_end - al3_status.vaddr_start;
     ret = ioctl(al3_status.mem_dev_fd, AXIOM_MEM_DEV_CONFIG_VMEM, &memreq);
     if (ret) {
-	perror("ioctl");
-	return ret;
+        perror("ioctl");
+        ret = AXAL_RET_ERROR;
+        goto end;
     }
 
     memapp.app_id = appid;
@@ -176,18 +238,29 @@ axiom_allocator_init(size_t *private_size, size_t *shared_size,
     /* set the application ID and regions */
     ret = ioctl(al3_status.mem_dev_fd, AXIOM_MEM_DEV_SET_APP, &memapp);
     if (ret) {
-	perror("ioctl");
-	return ret;
+        perror("ioctl");
+        goto end;
     }
 
-    return al3_info.init(private_start, *private_size, shared_start,
+    ret = al3_info.init(private_start, *private_size, shared_start,
             *shared_size);
+
+end:
+    AXIOM_EXTRAE(Extrae_event(axiom_extrae_apimem, AX_EXTRAE_APIMEM_END));
+    return ret;
 }
 
 void *
 axiom_private_malloc(size_t sz)
 {
-    return al3_info.private_malloc(sz);
+    void *ret;
+
+    AXIOM_EXTRAE(Extrae_event(axiom_extrae_apimem, AX_EXTRAE_APIMEM_PMALLOC));
+
+    ret = al3_info.private_malloc(sz);
+
+    AXIOM_EXTRAE(Extrae_event(axiom_extrae_apimem, AX_EXTRAE_APIMEM_END));
+    return ret;
 }
 
 void *
@@ -198,10 +271,12 @@ axiom_shared_malloc(size_t sz)
     void *addr;
     int ret;
 
+    AXIOM_EXTRAE(Extrae_event(axiom_extrae_apimem, AX_EXTRAE_APIMEM_SMALLOC));
+
     /* TODO: Do we need to add a mutex to protect this function? */
     addr = al3_info.shared_malloc(sz);
     if (addr) {
-        return addr;
+        goto end;
     }
 
     /*
@@ -213,28 +288,38 @@ axiom_shared_malloc(size_t sz)
     block_size = sz + sizeof(sz);
     ret = axiom_al23_alloc_shblock(&block_addr, &block_size);
     if (ret) {
-        return NULL;
+        addr = NULL;
+        goto end;
     }
 
     /* add the new block to L3 allocator */
     ret = al3_info.add_shregion(block_addr + al3_status.vaddr_start,
             block_size);
     if (ret) {
-        return NULL;
+        addr = NULL;
+        goto end;
     }
 
     /* retry L3 allocation */
-    return al3_info.shared_malloc(sz);
+    addr = al3_info.shared_malloc(sz);
+
+end:
+    AXIOM_EXTRAE(Extrae_event(axiom_extrae_apimem, AX_EXTRAE_APIMEM_END));
+    return addr;
 }
 
 void
 axiom_private_free(void *ptr)
 {
+    AXIOM_EXTRAE(Extrae_event(axiom_extrae_apimem, AX_EXTRAE_APIMEM_PFREE));
     al3_info.private_free(ptr);
+    AXIOM_EXTRAE(Extrae_event(axiom_extrae_apimem, AX_EXTRAE_APIMEM_END));
 }
 
 void
 axiom_shared_free(void *ptr)
 {
+    AXIOM_EXTRAE(Extrae_event(axiom_extrae_apimem, AX_EXTRAE_APIMEM_SFREE));
     al3_info.shared_free(ptr);
+    AXIOM_EXTRAE(Extrae_event(axiom_extrae_apimem, AX_EXTRAE_APIMEM_END));
 }
