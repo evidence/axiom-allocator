@@ -4,7 +4,10 @@
  * \version     v0.10
  * \date        2016-10-13
  *
- * This file contains the AXIOM allocator level 2
+ * This file contains the AXIOM allocator level 2.
+ *
+ * Copyright (C) 2016, Evidence Srl.
+ * Terms of use are as specified in COPYING
  */
 #include <stdlib.h>
 #include <stdint.h>

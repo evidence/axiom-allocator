@@ -6,9 +6,17 @@
  *
  * This file contains the AXIOM allocator interface between L2 and L3
  *
+ * Copyright (C) 2016, Evidence Srl.
+ * Terms of use are as specified in COPYING
  */
 #ifndef AXIOM_ALLOCATOR_L2_L3_h
 #define AXIOM_ALLOCATOR_L2_L3_h
+
+/**
+ * \defgroup AXIOM_ALLOCATOR
+ *
+ * \{
+ */
 
 /*! \brief Axiom allocator: L2 block size       1 MB */
 #define AXIOM_ALLOCATOR_L2_BSIZE                (1 << 20)
@@ -53,5 +61,7 @@ int axiom_al23_alloc_shblock(uintptr_t *start, size_t *size);
  *         (>=0 if everything is OK)
  */
 int axiom_al23_get_appid(void);
+
+/** \} */
 
 #endif /* !AXIOM_L2_ALLOCATOR_h */

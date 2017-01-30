@@ -7,6 +7,8 @@
  * This file contains the AXIOM message exchanged between levels to implement
  * the allocator API
  *
+ * Copyright (C) 2016, Evidence Srl.
+ * Terms of use are as specified in COPYING
  */
 #ifndef AXIOM_ALLOCATOR_PROTOCOL_h
 #define AXIOM_ALLOCATOR_PROTOCOL_h

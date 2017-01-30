@@ -5,6 +5,9 @@
  * \date        2016-09-29
  *
  * This file contains the implementation of AXIOM L2 L3 allocator interface.
+ *
+ * Copyright (C) 2016, Evidence Srl.
+ * Terms of use are as specified in COPYING
  */
 #include <stdlib.h>
 #include <stdint.h>

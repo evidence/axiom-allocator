@@ -1,3 +1,14 @@
+/*!
+ * \file axiom_allocator_l1_l2.c
+ *
+ * \version     v0.10
+ * \date        2016-09-23
+ *
+ * This file contains the interface between AXIOM L1 and L2 allocator.
+ *
+ * Copyright (C) 2016, Evidence Srl.
+ * Terms of use are as specified in COPYING
+ */
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>

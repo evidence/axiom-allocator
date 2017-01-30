@@ -6,9 +6,17 @@
  *
  * This file contains the AXIOM L3 allocator skeleton API
  *
+ * Copyright (C) 2016, Evidence Srl.
+ * Terms of use are as specified in COPYING
  */
 #ifndef AXIOM_L3_ALLOCATOR_h
 #define AXIOM_L3_ALLOCATOR_h
+
+/**
+ * \defgroup AXIOM_ALLOCATOR
+ *
+ * \{
+ */
 
 typedef int (*axiom_al3_init_t)(uintptr_t private_start, size_t private_size,
         uintptr_t shared_start, size_t shared_size);
@@ -44,6 +52,8 @@ void axiom_al3_register(axiom_al3_info_t *info);
 #define module_init(function) \
  __attribute__ ((section (".init.axiom_allocator"))) void *axiom_init_func_ ## function = function;
 
+/** \} */
+
 //#define module_init(function)						\
 //static void do_init_ ## function(void)				\
 //{									\
@@ -56,5 +66,4 @@ void axiom_al3_register(axiom_al3_info_t *info);
 //    function();							\
 //}
 //  */
-  
 #endif /* !AXIOM_L3_ALLOCATOR_h */

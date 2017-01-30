@@ -5,9 +5,18 @@
  * \date        2016-09-23
  *
  * This file contains the AXIOM allocator interface between level 1 and level 2
+ *
+ * Copyright (C) 2016, Evidence Srl.
+ * Terms of use are as specified in COPYING
  */
 #ifndef AXIOM_ALLOCATOR_L1_L2_h
 #define AXIOM_ALLOCATOR_L1_L2_h
+
+/**
+ * \defgroup AXIOM_ALLOCATOR
+ *
+ * \{
+ */
 
 #include "axiom_allocator_protocol.h"
 
@@ -79,4 +88,7 @@ axiom_al12_alloc_parsereply(void *payload, size_t payload_size,
  */
 axiom_err_t
 axiom_al12_release(axiom_dev_t *dev, axiom_app_id_t appid);
+
+/** \} */
+
 #endif /* AXIOM_ALLOCATOR_L1_L2_h */

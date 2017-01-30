@@ -5,6 +5,9 @@
  * \date        2016-09-29
  *
  * This file contains the HW implementation of axiom L3 allocator.
+ *
+ * Copyright (C) 2016, Evidence Srl.
+ * Terms of use are as specified in COPYING
  */
 #include <stdlib.h>
 #include <stdio.h>

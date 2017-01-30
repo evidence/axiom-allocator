@@ -5,6 +5,9 @@
  * \date        2016-09-23
  *
  * This file contains the AXIOM allocator level 2 API
+ *
+ * Copyright (C) 2016, Evidence Srl.
+ * Terms of use are as specified in COPYING
  */
 #ifndef AXIOM_ALLOCATOR_L2_h
 #define AXIOM_ALLOCATOR_L2_h

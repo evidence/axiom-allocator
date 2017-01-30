@@ -1,5 +1,3 @@
-#ifndef AXIOM_ALLOCATOR_H
-#define AXIOM_ALLOCATOR_H
 /*!
  * \file axiom_allocator.h
  *
@@ -8,7 +6,11 @@
  *
  * This file contains the AXIOM Allocator API
  *
+ * Copyright (C) 2016, Evidence Srl.
+ * Terms of use are as specified in COPYING
  */
+#ifndef AXIOM_ALLOCATOR_H
+#define AXIOM_ALLOCATOR_H
 
 /**
  * \defgroup AXIOM_ALLOCATOR
