@@ -92,7 +92,11 @@ PKG_PROG_PKG_CONFIG([0.28])
 #echo PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR}
 
 PKG_CHECK_MODULES([axiom_libraries],[axiom_run_api >= 0.9 axiom_init_api >= 0.9 axiom_user_api >= 0.9])
+AC_SUBST([axiom_libraries_CFLAGS])
+AC_SUBST([axiom_libraries_LIBS])
 PKG_CHECK_MODULES([evidence_lmm],[evi_lmm >= 0.1])
+AC_SUBST([evidence_lmm_CFLAGS])
+AC_SUBST([evidence_lmm_LIBS])
 
 # Checks for header files.
 AC_CHECK_HEADERS([stdint.h stdlib.h string.h sys/time.h])
