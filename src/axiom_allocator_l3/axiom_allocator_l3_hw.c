@@ -1,7 +1,7 @@
 /*!
  * \file axiom_allocator_l3_hw.c
  *
- * \version     v0.12
+ * \version     v0.13
  * \date        2016-09-29
  *
  * This file contains the HW implementation of axiom L3 allocator.

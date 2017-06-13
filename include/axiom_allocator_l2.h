@@ -1,7 +1,7 @@
 /*!
  * \file axiom_allocator_l2.h
  *
- * \version     v0.12
+ * \version     v0.13
  * \date        2016-09-23
  *
  * This file contains the AXIOM allocator level 2 API

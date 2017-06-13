@@ -1,7 +1,7 @@
 /*!
  * \file axiom_allocator.c
  *
- * \version     v0.12
+ * \version     v0.13
  * \date        2016-09-29
  *
  * This file contains the implementation of axiom-allocator API.

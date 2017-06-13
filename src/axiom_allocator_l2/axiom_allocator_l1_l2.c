@@ -1,7 +1,7 @@
 /*!
  * \file axiom_allocator_l1_l2.c
  *
- * \version     v0.12
+ * \version     v0.13
  * \date        2016-09-23
  *
  * This file contains the interface between AXIOM L1 and L2 allocator.
