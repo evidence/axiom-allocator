@@ -1,4 +1,4 @@
-#                                               -*- Autoconf -*-
+#                                              -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
@@ -79,11 +79,18 @@ AC_ARG_WITH([axiom-sysroot],
 AC_SUBST([AXIOM_SYSROOT])
 export PKG_CONFIG_PATH=
 AC_SUBST([PKG_CONFIG_PATH])
-export PKG_CONFIG_LIBDIR="$AXIOM_SYSROOT/usr/lib/pkgconfig:$AXIOM_SYSROOT/usr/share/pkgconfig"
+export PKG_CONFIG_LIBDIR="$AXIOM_SYSROOT/usr/lib/pkgconfig:$AXIOM_SYSROOT/usr/share/pkgconfig:$AXIOM_SYSROOT/usr/local/lib/pkgconfig"
 AC_SUBST([PKG_CONFIG_LIBDIR])
 export PKG_CONFIG_SYSROOT_DIR="$AXIOM_SYSROOT"
 AC_SUBST([PKG_CONFIG_SYSROOT_DIR])
 PKG_PROG_PKG_CONFIG([0.28])
+
+
+ALLOCATOR_LDS_FILENAME=allocator.lds
+AC_ARG_WITH([allocator-lds],
+            AS_HELP_STRING([--with-allocator-lds=filename], [Choose linker script, a file from src directory]),
+            [ALLOCATOR_LDS_FILENAME="$withval"])
+AC_SUBST([ALLOCATOR_LDS_FILENAME])
 
 # debug :-)
 #echo AXIOM_SYSROOT=${AXIOM_SYSROOT}

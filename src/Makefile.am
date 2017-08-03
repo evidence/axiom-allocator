@@ -7,7 +7,7 @@ AM_CFLAGS += -DPDEBUG
 endif
 
 #AM_LDFLAGS = -Wl,--verbose -Wl,-T./allocator.lds
-AM_LDFLAGS = -Wl,-T./allocator.lds -L@PKG_CONFIG_SYSROOT_DIR@/usr/lib -levi_lmm @axiom_libraries_LIBS@  
+AM_LDFLAGS = -Wl,-T./@ALLOCATOR_LDS_FILENAME@ -L@PKG_CONFIG_SYSROOT_DIR@/usr/lib -levi_lmm @axiom_libraries_LIBS@  
 # @evidence_lmm_LIBS@ can not be used because it use a custom linker script (and we need to use onlu our allocator.lds)
 
 #-L@PKG_CONFIG_SYSROOT_DIR@/usr/lib 
