@@ -1,0 +1,5 @@
+/usr/include/*
+/usr/lib/pkgconfig/*
+/usr/lib/lib*la
+/usr/lib/lib*a
+

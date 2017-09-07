@@ -1,0 +1,26 @@
+Source: axiom-allocator
+Section: unknown
+Priority: optional
+Maintainer: Massimiliano <massy@unknown>
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.5
+Homepage: <insert the upstream URL, if relevant>
+Vcs-Git: git://anonscm.debian.org/collab-maint/axiom-apps.git
+
+Package: libaxiom-allocator
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Axiom allocator library
+ Axiom allocator library
+
+Package: libaxiom-allocator-dbg
+Architecture: any
+Depends: libaxiom-allocator (= ${binary:Version}), ${misc:Depends}
+Description: Axiom allocator library
+ Axiom allocator library
+
+Package: libaxiom-allocator-dev
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Axiom allocator library - development files
+ Axiom allocator library - development files
