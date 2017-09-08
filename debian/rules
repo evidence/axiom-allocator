@@ -2,16 +2,6 @@
 
 DEBIAN_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
-#DEB_TARGET_ARCH=arm64
-#DEB_TARGET_ARCH_BITS=64
-#DEB_TARGET_ARCH_CPU=arm64
-#DEB_TARGET_ARCH_ENDIAN=little
-#DEB_TARGET_ARCH_OS=linux
-#DEB_TARGET_GNU_CPU=aarch64
-#DEB_TARGET_GNU_SYSTEM=linux-gnu
-#DEB_TARGET_GNU_TYPE=aarch64-linux-gnu
-#DEB_TARGET_MULTIARCH=aarch64-linux-gnu
-
 .PHONY: build build-arch build-indep binary binary-arch binary-indep clean
 
 build: build-arch build-indep
@@ -24,11 +14,12 @@ build-indep:
 
 binary: binary-arch binary-indep
 
-binary-arch: make-changelog
+binary-arch: make-changelog init-install
 	dh_testroot
 	dh_prep
 	dh_installdirs
-	PATH=$(PATH):$(LINARO)/host/usr/bin make P=1 DESTDIR=$(DEBIAN_DIR)/tmp install
+
+	PATH=$(PATH):$(LINARO)/host/usr/bin make DESTDIR=$(DEBIAN_DIR)/tmp install
 
 	dh_install --list-missing
 	dh_installdocs
@@ -59,7 +50,7 @@ binary-arch: make-changelog
 	dh_gconf
 	dh_icons
 	dh_perl
-	dh_usrlocal
+#	dh_usrlocal
 
 	dh_link
 	dh_installxfonts
@@ -74,37 +65,29 @@ binary-arch: make-changelog
 	dh_md5sums
 	dh_builddeb
 
-
-
-xxxxx:
-	dh_install --fail-missing
-	dh_installdocs
-	dh_installchangelogs
-	dh_lintian
-	dh_link
-	dh_compress
-	dh_fixperms
-#	dh_strip
-	dh_makeshlibs
-	dh_shlibdeps --sysroot=$(ROOTFS) -- \
-		-S/home/massy/axiom-evi/axiom-allocator/../axiom-evi-allocator-lib/debian/libevi-lmm/usr \
-		-S/home/massy/axiom-evi/axiom-allocator/../axiom-evi-nic/debian/libaxiom-user/usr \
-		-S/home/massy/axiom-evi/axiom-allocator/../axiom-evi-apps/axiom-init/debian/libaxiom-init/usr \
-		-S/home/massy/axiom-evi/axiom-allocator/../axiom-evi-apps/axiom-run/debian/libaxiom-run/usr 
-	dh_installdeb
-	dh_gencontrol
-	dh_md5sums
-#	for PKG in $(shell cat $(DEBIAN_DIR)/control| grep "^Package" | sed -e 's/Package: //'); do \
-	  sed -i -e 's/amd64/arm64/' $(DEBIAN_DIR)/$${PKG}/DEBIAN/control ;\
-	done
-	dh_builddeb
-
 binary-indep:
 
-clean: clean-changelog
+clean: clean-changelog clean-install
 	dh_testdir
 	make clean
 	dh_clean
+
+#
+# init-install
+#
+
+init-install:
+ifeq ($(FS),x86)
+	ln -sf $(DEBIAN_DIR)/libaxiom-allocator-dev.install.x86 $(DEBIAN_DIR)/libaxiom-allocator-dev.install
+	ln -sf $(DEBIAN_DIR)/libaxiom-allocator.install.x86 $(DEBIAN_DIR)/libaxiom-allocator.install
+else
+	ln -sf $(DEBIAN_DIR)/libaxiom-allocator-dev.install.other $(DEBIAN_DIR)/libaxiom-allocator-dev.install
+	ln -sf $(DEBIAN_DIR)/libaxiom-allocator.install.other $(DEBIAN_DIR)/libaxiom-allocator.install
+endif
+
+clean-install:
+	rm -f $(DEBIAN_DIR)/libaxiom-allocator.install 
+	rm -f $(DEBIAN_DIR)/libaxiom-allocator-dev.install 
 
 #
 # changelog
