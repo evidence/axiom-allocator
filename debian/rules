@@ -69,7 +69,7 @@ binary-indep:
 
 clean: clean-changelog clean-install
 	dh_testdir
-	make clean
+	test -e Makefile && make clean || true
 	dh_clean
 
 #
