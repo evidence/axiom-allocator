@@ -1,2 +1,13 @@
 changelog
 tmp/
+files
+libaxiom-allocator-dbg.substvars
+libaxiom-allocator-dbg/
+libaxiom-allocator-dev.install
+libaxiom-allocator-dev.substvars
+libaxiom-allocator-dev/
+libaxiom-allocator.install
+libaxiom-allocator.postinst.debhelper
+libaxiom-allocator.postrm.debhelper
+libaxiom-allocator.substvars
+libaxiom-allocator/
