@@ -120,4 +120,7 @@ AC_CONFIG_FILES([Makefile
 		 axiom_allocator.pc
                  src/Makefile
                  test/Makefile])
+
+AC_CONFIG_LINKS([src/allocator.lds:src/allocator.lds])
+
 AC_OUTPUT

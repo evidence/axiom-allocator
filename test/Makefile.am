@@ -10,5 +10,4 @@ endif
 bin_PROGRAMS = axiom-allocator-test
 
 axiom_allocator_test_SOURCES = axiom-allocator-test.c
-axiom_allocator_test_LDADD = $(top_srcdir)/src/libaxiom_allocator.la
-
+axiom_allocator_test_LDADD = $(top_builddir)/src/libaxiom_allocator.la

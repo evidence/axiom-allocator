@@ -2,6 +2,10 @@
 
 DEBIAN_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
+ifndef LINARO
+$(warning LINARO environment variable not found)
+endif
+
 .PHONY: build build-arch build-indep binary binary-arch binary-indep clean
 
 build: build-arch build-indep
@@ -19,7 +23,7 @@ binary-arch: make-changelog init-install
 	dh_prep
 	dh_installdirs
 
-	PATH=$(PATH):$(LINARO)/host/usr/bin make DESTDIR=$(DEBIAN_DIR)/tmp install
+	PATH=$(PATH):$(LINARO)/host/usr/bin $(MAKE) -C build DESTDIR=$(DEBIAN_DIR)/tmp install
 
 	dh_install --list-missing
 	dh_installdocs
@@ -69,7 +73,7 @@ binary-indep:
 
 clean: clean-changelog clean-install
 	dh_testdir
-	test -e Makefile && make clean || true
+#	test -e Makefile && make clean || true
 	dh_clean
 
 #
