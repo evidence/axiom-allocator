@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <stdint.h>
 
+#include "axiom_nic_limits.h"
 #include "axiom_allocator.h"
 #include "axiom_allocator_l3.h"
 #include "dprintf.h"
@@ -24,7 +25,10 @@
  * \cond INTERNAL_MACRO
  */
 #define AXAL_LMM_DEFAULT_PRIO           (0)
-#define AXAL_LMM_ALLOC_OVERHEAD         (sizeof(size_t))
+/* AXAL_LMM_ALLOC_OVERHEAD must be > sizeof(size_t) used to store the size of
+ * the allocated region, needed during the free
+ */
+#define AXAL_LMM_ALLOC_OVERHEAD         (AXIOM_RDMA_ADDRESS_ALIGNMENT)
 /**
  * \endcond
  */
