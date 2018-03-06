@@ -1,7 +1,7 @@
 /*!
  * \file axiom-allocator-test.c
  *
- * \version     v1.0
+ * \version     v1.1
  * \date        2016-09-29
  *
  * This file contains the tests of axiom allocator

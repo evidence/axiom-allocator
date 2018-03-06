@@ -1,7 +1,7 @@
 /*!
  * \file axiom_allocator_l2.c
  *
- * \version     v1.0
+ * \version     v1.1
  * \date        2016-10-13
  *
  * This file contains the AXIOM allocator level 2.
