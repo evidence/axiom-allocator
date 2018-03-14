@@ -1,7 +1,7 @@
 /*!
  * \file axiom_allocator_protocol.h
  *
- * \version     v1.1
+ * \version     v1.2
  * \date        2016-09-26
  *
  * This file contains the AXIOM message exchanged between levels to implement
